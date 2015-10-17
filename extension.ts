@@ -1,22 +1,56 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import * as vscode from 'vscode'; 
+import {window, workspace, commands, Disposable, Position, Range} from 'vscode';
+import * as esformatter from 'esformatter';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
-export function activate() { 
+export function activate(disposables: Disposable[]) {
+    // create a new formatter
+    let formatter = new ESFormatController();
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "esformatter" is now active!'); 
+    // add to a list of disposables which are disposed when this extension
+    // is deactivated again.
+    disposables.push(formatter);
+}
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with  registerCommand
-	// The commandId parameter must match the command field in package.json
-	vscode.commands.registerCommand('extension.sayHello', () => {
-		// The code you place here will be executed every time your command is executed
+class ESFormatController {
 
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World!');
-	});
+    private _disposable: Disposable;
+
+    constructor() {
+        // subscribe to selection change and editor activation events
+        let subscriptions: Disposable[] = [];
+        window.onDidChangeTextEditorSelection(this._onEvent, this, subscriptions);
+        window.onDidChangeActiveTextEditor(this._onEvent, this, subscriptions);
+
+        // create a combined disposable from both event subscriptions
+        this._disposable = Disposable.of(...subscriptions);
+    }
+
+    dispose() {
+        this._disposable.dispose();
+    }
+
+    private _onEvent() {
+        // Get the current text editor
+        const editor = window.getActiveTextEditor();
+        if (!editor) {
+            return;
+        }
+
+        const doc = editor.getTextDocument();
+        const docContent = doc.getText();
+
+        const text = esformatter.format(docContent);
+
+        editor.edit(editBuilder => {
+            const lastLine = doc.getLineCount();
+
+            const start = new Position(0, 0);
+            const end = new Position(lastLine, doc.getTextOnLine(lastLine).length);
+
+            editBuilder.replace(new Range(start, end), text);
+        });
+    }
 }
