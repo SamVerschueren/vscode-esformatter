@@ -1,26 +1,22 @@
-'use strict';
+// The module 'vscode' contains the VS Code extensibility API
+// Import the module and reference it with the alias vscode in your code below
+import * as vscode from 'vscode'; 
 
-// The module vscode-languageworker contains all the necessary code and typings
-// to implement a language worker for node.
-import { runSingleFileValidator, SingleFileValidator, InitializeResponse, IValidationRequestor, IDocument, Diagnostic, Severity, Position, Files } from 'vscode-languageworker';
+// this method is called when your extension is activated
+// your extension is activated the very first time the command is executed
+export function activate() { 
 
-let validator : SingleFileValidator = {
-	initialize: (rootFolder: string): Thenable<InitializeResponse> => {
-		return Promise.resolve(null);
-	},
-	onConfigurationChange(settings: any, requestor: IValidationRequestor): void {
-		// VSCode settings have changed and the requested settings changes
-		// have been synced over to the language worker
+	// Use the console to output diagnostic information (console.log) and errors (console.error)
+	// This line of code will only be executed once when your extension is activated
+	console.log('Congratulations, your extension "esformatter" is now active!'); 
 
-		// Request re-validation of all open documents
-		requestor.all();
-	},
-	validate: (document: IDocument): Diagnostic[] => {
-		// Validate a single document for diagnostic messages
-		return [];
-	}
-};
+	// The command has been defined in the package.json file
+	// Now provide the implementation of the command with  registerCommand
+	// The commandId parameter must match the command field in package.json
+	vscode.commands.registerCommand('extension.sayHello', () => {
+		// The code you place here will be executed every time your command is executed
 
-// Run the single file validator. The protocol is reads form stdin and
-// writes to stdout.
-runSingleFileValidator(process.stdin, process.stdout, validator);
+		// Display a message box to the user
+		vscode.window.showInformationMessage('Hello World!');
+	});
+}

@@ -12,17 +12,6 @@ Press <kbd>F1</kbd> and narrow down the list commands by typing `extension`. Pic
 Simply pick the `esformatter` extension from the list
 
 
-## Usage
-
-Enable the formatter in the VS Code Settings.
-
-```json
-{
-  "esformatter.enable": true
-}
-```
-
-
 ## License
 
 MIT © [Sam Verschueren](http://github.com/SamVerschueren)
