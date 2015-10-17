@@ -1,6 +1,6 @@
 # vscode-esformatter
 
-> Beautify JavaScript https://atom.io/packages/esformatter
+> Beautify JavaScript using [esformatter](https://github.com/millermedeiros/esformatter)
 
 
 ## Install
