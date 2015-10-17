@@ -1,0 +1,44 @@
+{
+  "name": "esformatter",
+  "version": "0.0.1",
+  "publisher": "samverschueren",
+  "engines": {
+    "vscode": "*"
+  },
+  "dependencies": {
+    "vscode-languageworker": "*"
+  },
+  "devDependencies": {
+    "typescript": "^1.6.2"
+  },
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "esformatter configuration",
+      "properties": {
+        "esformatter.enable": {
+          "type": "boolean",
+          "default": false,
+          "description": "Control whether esformatter is enabled for JavaScript files or not."
+        }
+      }
+    },
+    "languageWorkers": {
+      "activate": ["onLanguage:javascript", "onLanguage:javascriptreact"],
+      "executable": {
+        "run": {
+          "nodeModule": "out/extension.js"
+        },
+        "debug": {
+          "nodeModule": "out/extension.js",
+          "execArgv": ["--nolazy", "--debug=5871"]
+        }
+      },
+      "settings": "esformatter"
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "./node_modules/.bin/tsc",
+    "compile": "./node_modules/.bin/tsc -watch -p ./"
+  }
+}
